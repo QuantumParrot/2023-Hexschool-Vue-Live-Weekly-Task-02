@@ -1,0 +1,8 @@
+img {
+    max-width: 100%;
+}
+
+.img:hover {
+    transition: all .5s;
+    box-shadow: 0 0 2px 2px gray;
+}

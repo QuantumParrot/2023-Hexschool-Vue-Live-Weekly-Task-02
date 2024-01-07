@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入 - 2023 六角學院 Vue 直播班 - 第二週作業</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css' integrity='sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==' crossorigin='anonymous'/>
+</head>
+<body>
+    <div id="app">
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="card p-5 shadow">
+                        <h2 class="card-title text-center mb-5">管理員登入</h2>
+                        <form action="">
+                            <div class="row mb-4">
+                                <label for="username" class="col-2 col-form-label fw-bold">帳號</label>
+                                <div class="col-10">
+                                    <input type="text" class="form-control" v-model.trim="user.username">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="password" class="col-2 col-form-label fw-bold">密碼</label>
+                                <div class="col-10">
+                                    <input type="password" class="form-control" v-model="user.password">
+                                </div>
+                            </div>
+                            <div class="pt-4 text-center">
+                                <button type="button" class="btn btn-primary px-4 py-2" @click="login" ref="loginButton">登入</button>
+                                <p class="text-muted mt-4 mb-0" v-if="message">{{ message }}</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js' integrity='sha512-TjBzDQIDnc6pWyeM1bhMnDxtWH0QpOXMcVooglXrali/Tj7W569/wd4E8EDjk1CwOAOPSJon1VfcEt1BI4xIrA==' crossorigin='anonymous'></script>
+    <script type="module">
+
+        import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.5/vue.esm-browser.min.js';
+
+        const app = createApp({
+
+            data() {
+
+                return {
+                    apiUrl: 'https://ec-course-api.hexschool.io/v2/admin/signin',
+                    user: {
+                        username: '',
+                        password: '',
+                    },
+                    message: '',
+                }
+                
+            },
+
+            methods: {
+
+                login() {
+                    this.$refs.loginButton.setAttribute('disabled', true);
+                    this.message = '登入中，請稍候';
+                    axios.post(this.apiUrl, this.user)
+                    .then(res => {
+                        // console.log(res);
+                        const { message, token, expired } = res.data;
+                        this.message = message;
+                        document.cookie = `vueToken=${token}; expires=${new Date(expired)}`;
+                        this.user = {};
+                        this.$refs.loginButton.removeAttribute('disabled');
+                        window.location.href = './dashboard.html';
+                    })
+                    .catch(error => {
+                        // console.log(error);
+                        this.message = error.response.data.message;
+                        this.$refs.loginButton.removeAttribute('disabled');
+                    })
+                }
+
+            }
+
+        });
+
+        app.mount('#app');
+
+    </script>
+</body>
+</html>
