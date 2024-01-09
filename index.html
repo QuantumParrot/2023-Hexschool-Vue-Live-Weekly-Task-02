@@ -23,17 +23,22 @@
                             <div class="row mb-4">
                                 <label for="username" class="col-2 col-form-label fw-bold">帳號</label>
                                 <div class="col-10">
-                                    <input type="text" class="form-control" v-model.trim="user.username">
+                                    <input id="username" type="text"
+                                           class="form-control"
+                                           v-model.trim="user.username">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="password" class="col-2 col-form-label fw-bold">密碼</label>
                                 <div class="col-10">
-                                    <input type="password" class="form-control" v-model="user.password">
+                                    <input id="password" type="password"
+                                           class="form-control"
+                                           v-model="user.password">
                                 </div>
                             </div>
                             <div class="pt-4 text-center">
-                                <button type="button" class="btn btn-primary px-4 py-2" @click="login" ref="loginButton">登入</button>
+                                <button type="button" class="btn btn-primary px-4 py-2" @click="login"
+                                        :disabled="isLoading">登入</button>
                                 <p class="text-muted mt-4 mb-0" v-if="message">{{ message }}</p>
                             </div>
                         </form>
@@ -71,7 +76,6 @@
 
                 login() {
                     this.isLoading = true;
-                    this.$refs.loginButton.setAttribute('disabled', true);
                     this.message = '登入中，請稍候';
                     axios.post(this.apiUrl, this.user)
                     .then(res => {
@@ -81,14 +85,12 @@
                         this.message = message;
                         document.cookie = `vueToken=${token}; expires=${new Date(expired)}`;
                         this.user = {};
-                        this.$refs.loginButton.removeAttribute('disabled');
                         window.location.href = './dashboard.html';
                     })
                     .catch(error => {
                         // console.log(error);
                         this.isLoading = false;
                         this.message = error.response.data.message;
-                        this.$refs.loginButton.removeAttribute('disabled');
                     })
                 }
 
