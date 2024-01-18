@@ -62,8 +62,8 @@
                                     <span class="badge text-bg-primary py-2">{{ tempProduct.category }}</span>
                                     <h3 class="mb-0">{{ tempProduct.title }}</h3>
                                 </div>
-                                <p class="card-text"><strong>商品內容</strong> -- {{ tempProduct.content }}</p>
-                                <p class="card-text"><strong>商品描述</strong> -- {{ tempProduct.description }}</p>
+                                <p class="card-text text-muted">{{ tempProduct.content }}</p>
+                                <p class="card-text">{{ tempProduct.description }}</p>
                                 <p class="card-text">
                                 NT$ {{ tempProduct.price }}
                                 <span class="text-muted text-decoration-line-through" v-text="tempProduct.origin_price"></span> 元 /
